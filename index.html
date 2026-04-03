@@ -42,25 +42,22 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* --- CSS LILIN VIRTUAL --- */
+        /* --- LILIN VIRTUAL --- */
         .candle-container {
             position: relative; margin-bottom: 60px; margin-top: 20px;
             display: none; opacity: 0; transition: opacity 1s ease;
         }
-
         .candle {
             width: 45px; height: 130px;
             background: linear-gradient(to bottom, #fffdf2, #f5e3c3, #d4b886);
             border-radius: 4px 4px 10px 10px; position: relative;
             box-shadow: inset -5px 0 10px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.3);
         }
-
         .wick {
             width: 4px; height: 15px; background: #222;
             position: absolute; top: -15px; left: 50%;
             transform: translateX(-50%); border-radius: 2px 2px 0 0;
         }
-
         .flame {
             width: 26px; height: 45px;
             background: radial-gradient(ellipse at bottom, #fff 10%, #ffd700 40%, #ff8c00 80%, transparent 100%);
@@ -70,20 +67,16 @@
             animation: flicker 1s infinite alternate;
             transform-origin: bottom center; transition: all 0.3s ease;
         }
-
         .smoke {
             width: 15px; height: 15px; background: rgba(255, 255, 255, 0.6);
             border-radius: 50%; position: absolute; top: -20px; left: 50%;
             transform: translateX(-50%); opacity: 0; filter: blur(6px);
         }
-
         @keyframes flicker {
             0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
             50% { transform: translateX(-50%) scale(1.05) rotate(3deg); }
             100% { transform: translateX(-50%) scale(0.95) rotate(-1deg); }
         }
-
-        /* Lilin ditiup (tombol ditahan) */
         .blowing .flame {
             transform: translateX(-50%) scale(0.6) rotate(50deg);
             box-shadow: 0 0 20px 5px rgba(255, 165, 0, 0.3);
@@ -93,15 +86,12 @@
             0% { transform: translateX(-50%) scale(0.6) rotate(45deg); }
             100% { transform: translateX(-50%) scale(0.5) rotate(55deg); }
         }
-
-        /* Lilin Mati */
         .extinguished .flame { opacity: 0; width: 0; height: 0; }
         .extinguished .smoke { animation: riseSmoke 2s ease-out forwards; }
         @keyframes riseSmoke {
             0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
             100% { opacity: 0; transform: translateX(-50%) translateY(-100px) scale(4); }
         }
-        /* -------------------------- */
 
         #actionBtn {
             background: rgba(255, 255, 255, 0.08);
@@ -114,32 +104,68 @@
             text-transform: uppercase; outline: none; font-weight: bold;
             z-index: 100; position: relative;
         }
-
         #actionBtn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.2); }
 
+        /* --- DESAIN PESAN AKHIR YANG BARU (LEBIH MEWAH) --- */
         #pesan-akhir {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 20; text-align: center; width: 90%; max-width: 600px;
-            opacity: 0; display: none; transition: opacity 3s ease-in;
-            padding: 20px; box-sizing: border-box;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -45%);
+            z-index: 20; text-align: center; width: 90%; max-width: 650px;
+            opacity: 0; display: none; transition: all 3s ease-out;
+        }
+
+        .glass-card {
+            background: rgba(10, 15, 30, 0.5); /* Biru gelap transparan */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            border-radius: 25px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(0, 242, 254, 0.05);
+            animation: float 6s ease-in-out infinite alternate;
+            pointer-events: none; /* Biar klik tembus ke canvas */
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-15px); }
         }
 
         #pesan-akhir h1 {
-            color: #ffffff; font-size: clamp(32px, 8vw, 48px); 
-            margin-bottom: 20px; margin-top: 0;
-            text-shadow: 0 0 20px #00f2fe, 0 0 40px #4facfe;
+            /* Efek Hologram Berjalan */
+            background: linear-gradient(90deg, #00f2fe, #4facfe, #fff, #4facfe, #00f2fe);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: gradientShine 4s linear infinite;
+            
+            font-size: clamp(32px, 8vw, 50px); 
+            margin-bottom: 25px; margin-top: 0;
             letter-spacing: 2px; text-transform: uppercase;
         }
 
+        @keyframes gradientShine {
+            to { background-position: 200% center; }
+        }
+
         #pesan-akhir p { 
-            color: #f8fafc; font-size: clamp(16px, 4vw, 19px); 
-            line-height: 1.7; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            color: #f1f5f9; font-size: clamp(15px, 4vw, 18px); 
+            line-height: 1.8; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            font-weight: 300;
         }
 
         .highlight { 
             color: #ff9a9e; font-weight: bold; font-size: clamp(18px, 4.5vw, 22px); 
-            display: block; margin-top: 30px; text-shadow: 0 0 15px rgba(255, 154, 158, 0.6);
+            display: block; margin-top: 30px; text-shadow: 0 0 20px rgba(255, 154, 158, 0.5);
+            letter-spacing: 1px;
         }
+
+        .hint {
+            font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 30px;
+            letter-spacing: 2px; text-transform: uppercase;
+            animation: pulseHint 2s infinite;
+        }
+        @keyframes pulseHint { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
         #flash {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -167,10 +193,13 @@
     </div>
 
     <div id="pesan-akhir">
-        <h1>Happy Birthday!</h1>
-        <p>Malam ini, biarkan cahaya ini menembus jarak untuk mewakili pelukanku buat kamu.</p>
-        <p>Terima kasih sudah lahir ke dunia ini, menjadi versi dirimu yang luar biasa tangguh, dan memilih untuk terus bersamaku.</p>
-        <span class="highlight">I love you more than all the stars combined. ✨❤️</span>
+        <div class="glass-card">
+            <h1>Happy Birthday!</h1>
+            <p>Malam ini, biarkan cahaya ini menembus jarak untuk mewakili pelukanku buat kamu.</p>
+            <p>Terima kasih sudah lahir ke dunia ini, menjadi versi dirimu yang luar biasa tangguh, dan memilih untuk terus bersamaku.</p>
+            <span class="highlight">I love you more than all the stars combined. ✨❤️</span>
+            <div class="hint">Sentuh & Geser Layarnya</div>
+        </div>
     </div>
 
     <script>
@@ -180,6 +209,7 @@
         let width, height;
         let stars = [];
         let fireworks = [];
+        let stardust = []; // Array baru untuk jejak jari
         let shockwaveRadius = 0;
         let numStars = 200; 
         let fov = 250; 
@@ -286,11 +316,9 @@
                     isTransitioning = false;
                 }, 400); 
             } else {
-                // FASE MUNCUL LILIN & TOMBOL TAHAN
                 isChargingPhase = true;
                 storyText.style.opacity = 0;
                 setTimeout(() => {
-                    // Munculin lilinnya
                     candleWrapper.style.display = 'block';
                     setTimeout(() => { candleWrapper.style.opacity = '1'; }, 50);
 
@@ -325,7 +353,7 @@
             
             btn.innerText = "MENYALURKAN HARAPAN... ⚡";
             canvas.classList.add('shake'); 
-            candleWrapper.classList.add('blowing'); // Lilin ketiup
+            candleWrapper.classList.add('blowing'); 
             warpSpeed = 45; 
 
             if (audioEnabled) {
@@ -347,7 +375,7 @@
             clearTimeout(chargeTimer);
             btn.innerText = "TAHAN & TIUP LILINNYA 🌬️";
             canvas.classList.remove('shake');
-            candleWrapper.classList.remove('blowing'); // Lilin normal lagi
+            candleWrapper.classList.remove('blowing'); 
             warpSpeed = 0.5; portalGlow = 0;
 
             if (audioEnabled) {
@@ -360,7 +388,7 @@
             isExploded = true;
             canvas.classList.remove('shake');
             candleWrapper.classList.remove('blowing');
-            candleWrapper.classList.add('extinguished'); // Lilin mati berasap
+            candleWrapper.classList.add('extinguished'); 
             
             warpSpeed = 0; stars = []; shockwaveRadius = 1;
 
@@ -375,32 +403,60 @@
                     pad.triggerAttackRelease(["F3", "A3", "C4", "E4", "G4"], "4m"); 
                 }
 
-                // Kilatan cahaya
                 flash.style.display = 'block'; flash.style.opacity = '1';
                 setTimeout(() => { flash.style.opacity = '0'; }, 200);
 
-                // Ledakan partikel
-                let fireworkCount = width < 600 ? 200 : 450; 
-                for(let i=0; i < fireworkCount; i++) {
-                    fireworks.push({
-                        x: width/2, y: height/2,
-                        vx: (Math.random() - 0.5) * 35, vy: (Math.random() - 0.5) * 35 - 5, 
-                        r: Math.random() * 3.5 + 1, a: 1, 
-                        color: `hsl(${Math.random()*60 + 180}, 100%, 70%)` 
-                    });
-                }
+                createFireworks(width/2, height/2, width < 600 ? 200 : 400); // Ledakan utama
 
-                // Sembunyikan semua UI awal (termasuk lilin)
                 document.getElementById('ui-layer').style.display = 'none';
                 
-                // Munculkan pesan pamungkas
                 pesanAkhir.style.display = 'block';
-                setTimeout(() => { pesanAkhir.style.opacity = '1'; }, 500);
-            }, 50); // Jeda sangat singkat biar kerasa impact-nya
+                setTimeout(() => { 
+                    pesanAkhir.style.opacity = '1'; 
+                    pesanAkhir.style.transform = 'translate(-50%, -50%)'; // Gerakan naiknya mulus
+                }, 100);
+            }, 50); 
         }
 
+        // Fungsi buat kembang api (bisa dipanggil berulang)
+        function createFireworks(x, y, count) {
+            for(let i=0; i < count; i++) {
+                fireworks.push({
+                    x: x, y: y,
+                    vx: (Math.random() - 0.5) * 35, vy: (Math.random() - 0.5) * 35 - 5, 
+                    r: Math.random() * 3.5 + 1, a: 1, 
+                    color: `hsl(${Math.random()*60 + 180}, 100%, 70%)` 
+                });
+            }
+        }
+
+        // --- THE STARDUST INTERACTION (Setelah Ledakan) ---
+        function addStardust(x, y) {
+            if(!isExploded) return;
+            for(let i=0; i<3; i++) {
+                stardust.push({
+                    x: x, y: y,
+                    vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2,
+                    r: Math.random() * 4 + 1, a: 1,
+                    color: `hsl(${Math.random()*40 + 320}, 100%, 80%)` // Warna pinkish
+                });
+            }
+        }
+
+        window.addEventListener('pointermove', (e) => {
+            if(isExploded) addStardust(e.clientX, e.clientY);
+        });
+        
+        window.addEventListener('pointerdown', (e) => {
+            if(isExploded) {
+                createFireworks(e.clientX, e.clientY, 30); // Ledakan kecil pas di-klik
+                if (audioEnabled) impact.triggerAttackRelease("C2", "8n", undefined, 0.1); // Suara pop kecil
+            }
+        });
+
+        // --- RENDER LOOP ---
         function draw() {
-            ctx.fillStyle = isExploded ? `rgba(2, 2, 8, 0.4)` : `rgba(0, 0, 0, 0.4)`;
+            ctx.fillStyle = isExploded ? `rgba(5, 5, 12, 0.3)` : `rgba(0, 0, 0, 0.4)`;
             ctx.fillRect(0, 0, width, height);
 
             if (!isExploded) {
@@ -421,15 +477,26 @@
                     ctx.lineWidth = width < 600 ? 8 : 15; ctx.stroke();
                 }
 
+                // Render Fireworks
                 for(let i = fireworks.length - 1; i >= 0; i--) {
                     let p = fireworks[i];
-                    p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.a -= 0.004; 
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.a -= 0.008; 
                     
                     ctx.globalAlpha = Math.max(0, p.a);
                     ctx.fillStyle = p.color;
                     ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
-                    
                     if(p.a <= 0) fireworks.splice(i, 1);
+                }
+
+                // Render Stardust Trails
+                for(let i = stardust.length - 1; i >= 0; i--) {
+                    let s = stardust[i];
+                    s.x += s.vx; s.y += s.vy; s.a -= 0.02; // Hilang lebih cepat
+                    
+                    ctx.globalAlpha = Math.max(0, s.a);
+                    ctx.fillStyle = s.color;
+                    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill();
+                    if(s.a <= 0) stardust.splice(i, 1);
                 }
                 ctx.globalAlpha = 1;
             }
