@@ -11,7 +11,6 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
-        /* RESET & RESPONSIVE */
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #050508; color: #fff;
@@ -102,10 +101,10 @@
         #actionBtn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.2); 
-            border-top: 1px solid rgba(255, 255, 255, 0.4); /* Efek pantulan cahaya di atas */
+            border-top: 1px solid rgba(255, 255, 255, 0.4); 
             color: #fff;
             padding: clamp(12px, 3vw, 16px) clamp(25px, 6vw, 45px); 
-            font-size: clamp(14px, 4vw, 16px); 
+            font-size: clamp(13px, 4vw, 16px); 
             border-radius: 40px; letter-spacing: 2px;
             backdrop-filter: blur(10px); cursor: pointer; transition: all 0.3s ease;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -114,24 +113,26 @@
         }
         #actionBtn:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.1); }
 
-        /* --- DESAIN PESAN AKHIR (MODERN PREMIUM AESTHETIC) --- */
+        /* --- PESAN AKHIR --- */
         #pesan-akhir {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -45%);
-            z-index: 20; text-align: center; width: 90%; max-width: 600px;
+            z-index: 20; text-align: center; width: 92%; max-width: 650px;
             opacity: 0; display: none; transition: all 3s ease-out;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.03); /* Transparan banget, hampir gak keliatan warnanya */
+            background: rgba(255, 255, 255, 0.03); 
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-top: 1px solid rgba(255, 255, 255, 0.3); /* Cahaya halus di ujung atas */
-            border-left: 1px solid rgba(255, 255, 255, 0.2); /* Cahaya halus di ujung kiri */
+            border-top: 1px solid rgba(255, 255, 255, 0.3); 
+            border-left: 1px solid rgba(255, 255, 255, 0.2); 
             border-radius: 20px;
-            padding: 50px 35px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6); /* Bayangan dalam dan lembut */
+            padding: clamp(30px, 6vw, 45px) clamp(20px, 5vw, 35px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6); 
             animation: float 6s ease-in-out infinite alternate;
             pointer-events: none; 
+            max-height: 85vh; /* Biar gak luber di layar kecil */
+            overflow-y: auto;
         }
 
         @keyframes float {
@@ -140,35 +141,47 @@
         }
 
         #pesan-akhir h1 {
-            font-family: 'Playfair Display', serif; /* Font elegan */
-            font-weight: 500;
-            color: #ffffff; 
-            font-size: clamp(30px, 8vw, 44px); 
+            font-family: 'Playfair Display', serif; 
+            font-weight: 500; color: #ffffff; 
+            font-size: clamp(26px, 7vw, 40px); 
             margin-bottom: 25px; margin-top: 0;
-            letter-spacing: 1px;
-            text-shadow: 0 4px 15px rgba(255, 255, 255, 0.15); /* Cahaya putih halus, bukan neon */
+            letter-spacing: 1px; text-shadow: 0 4px 15px rgba(255, 255, 255, 0.15); 
+            background: linear-gradient(90deg, #fce7f3, #fff, #fce7f3);
+            background-size: 200% auto; color: transparent;
+            -webkit-background-clip: text; background-clip: text;
+            animation: gradientShine 5s linear infinite;
         }
 
+        @keyframes gradientShine { to { background-position: 200% center; } }
+
         #pesan-akhir p { 
-            color: rgba(255, 255, 255, 0.85); /* Putih gading, gak terlalu silau */
-            font-size: clamp(15px, 4vw, 17px); 
-            line-height: 1.8; margin-bottom: 20px; 
-            font-weight: 300;
+            color: rgba(255, 255, 255, 0.85); 
+            font-size: clamp(14px, 3.8vw, 16px); 
+            line-height: 1.7; margin-bottom: 18px; 
+            font-weight: 300; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .highlight-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(16px, 4.2vw, 19px);
+            font-style: italic;
+            color: #fff;
+            display: block;
+            margin: 25px 0;
+            font-weight: 500;
         }
 
         .highlight { 
-            color: #fce7f3; /* Pink pastel super pucat / Rose gold */
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-weight: 500; 
-            font-size: clamp(18px, 4.5vw, 22px); 
-            display: block; margin-top: 35px; 
+            color: #fce7f3; font-family: 'Playfair Display', serif;
+            font-style: italic; font-weight: 500; 
+            font-size: clamp(17px, 4.5vw, 21px); 
+            display: block; margin-top: 30px; 
             text-shadow: 0 2px 10px rgba(252, 231, 243, 0.3);
             letter-spacing: 0.5px;
         }
 
         .hint {
-            font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 40px;
+            font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 30px;
             letter-spacing: 3px; text-transform: uppercase;
             animation: pulseHint 2s infinite;
         }
@@ -201,11 +214,16 @@
 
     <div id="pesan-akhir">
         <div class="glass-card">
-            <h1>Happy Birthday</h1>
-            <p>Malam ini, biarkan cahaya ini menembus jarak untuk mewakili pelukanku buat kamu.</p>
-            <p>Terima kasih sudah lahir ke dunia ini, menjadi versi dirimu yang luar biasa tangguh, dan memilih untuk terus bersamaku.</p>
-            <span class="highlight">I love you more than all the stars combined. ✨</span>
-            <div class="hint">Sentuh layarnya</div>
+            <h1>Happy Birthday, Sayang</h1>
+            <p>Meskipun hari ini kita belum bisa ngerayain bareng secara langsung, aku mau kamu tau kalau kamu selalu jadi hal pertama yang aku syukuri setiap hari.</p>
+            
+            <span class="highlight-text">"Malam ini, biarkan cahaya ini menembus jarak untuk mewakili pelukanku buat kamu."</span>
+            
+            <p>Terima kasih ya, sudah lahir ke dunia ini. Terima kasih untuk semua tawa, kesabaran, dan perjuanganmu. Terima kasih udah bertahan menjadi versi dirimu yang luar biasa tangguh, dan selalu memilih untuk terus bersamaku.</p>
+            <p>Selamat bertambah usia. Semoga semua hal baik selalu menyertaimu, dan semoga aku selalu ada di setiap langkahmu.</p>
+            
+            <span class="highlight">I love you more than all the stars combined. ✨❤️</span>
+            <div class="hint">Sentuh & geser layarnya</div>
         </div>
     </div>
 
@@ -252,7 +270,6 @@
 
                 ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(sx, sy);
                 ctx.lineWidth = Math.max(0.5, (1 - this.z / width) * 4); 
-                // Warna bintang disoft-kan
                 let hue = warpSpeed > 5 ? 200 : 220; 
                 ctx.strokeStyle = `hsla(${hue}, 80%, 80%, ${1 - this.z / width})`;
                 ctx.stroke();
@@ -260,8 +277,8 @@
         }
         for(let i = 0; i < numStars; i++) stars.push(new Star());
 
-        // --- AUDIO ENGINE ---
-        let reverb, pad, riser, rumbleFilter, rumbleNoise, impact, heartbeat;
+        // --- AUDIO ENGINE (FIXED & LOUDER) ---
+        let reverb, pad, riser, impact, heartbeat, wind, windFilter;
         let audioInitialized = false;
         let audioEnabled = false; 
 
@@ -271,25 +288,35 @@
                 await Tone.start(); 
                 reverb = new Tone.Freeverb({ roomSize: 0.85, dampening: 3000 }).toDestination();
                 
-                rumbleFilter = new Tone.Filter(100, "lowpass").connect(reverb);
-                rumbleNoise = new Tone.Noise("pink").connect(rumbleFilter).start();
-                rumbleNoise.volume.value = -Infinity; 
+                // Suara Angin Tiupan (Lebih Jelas)
+                windFilter = new Tone.Filter(400, "lowpass").connect(reverb);
+                wind = new Tone.NoiseSynth({
+                    noise: { type: "pink" },
+                    envelope: { attack: 1, decay: 0.5, sustain: 1, release: 2 }
+                }).connect(windFilter);
+                wind.volume.value = -5;
 
+                // Ketegangan
                 riser = new Tone.Synth({ oscillator: { type: "fatpwm" }, envelope: { attack: 0.1, decay: 0, sustain: 1, release: 0.5 } }).connect(reverb);
-                riser.volume.value = -Infinity;
 
+                // Piano Megah
                 pad = new Tone.PolySynth(Tone.Synth, { oscillator: { type: "fatsawtooth" }, envelope: { attack: 0.1, decay: 0.1, sustain: 0.8, release: 6 } }).connect(reverb);
                 pad.volume.value = -3;
 
+                // Ledakan
                 impact = new Tone.MembraneSynth({ pitchDecay: 0.05, octaves: 10, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.4, sustain: 0.01, release: 1.4 } }).toDestination();
 
-                heartbeat = new Tone.MembraneSynth({ pitchDecay: 0.05, octaves: 4, oscillator: { type: "sine" }, envelope: { attack: 0.01, decay: 0.4, sustain: 0.01, release: 1.4 } }).connect(reverb);
-                heartbeat.volume.value = -5; 
+                // Detak Jantung (Langsung ke speaker biar nendang)
+                heartbeat = new Tone.MembraneSynth({ 
+                    pitchDecay: 0.05, octaves: 4, oscillator: { type: "sine" }, 
+                    envelope: { attack: 0.01, decay: 0.4, sustain: 0.01, release: 1.4 } 
+                }).toDestination();
+                heartbeat.volume.value = 5; // Dikeraskan
 
                 audioEnabled = true; 
                 audioInitialized = true;
             } catch (err) {
-                console.warn("Audio bypass fallback active.");
+                console.warn("Audio diblokir oleh browser.");
                 audioInitialized = true;
             }
         }
@@ -370,18 +397,22 @@
             warpSpeed = 45; 
 
             if (audioEnabled) {
-                rumbleNoise.volume.rampTo(-10, 3.5);
-                rumbleFilter.frequency.rampTo(3000, 3.5);
+                // Mainkan Angin
+                windFilter.frequency.rampTo(3000, 3.5);
+                wind.triggerAttack();
+
+                // Mainkan Riser
                 riser.volume.value = -25;
                 riser.triggerAttack("C2");
                 riser.frequency.rampTo("C6", 3.5); 
                 riser.volume.rampTo(-5, 3.5);
 
-                let bpm = 800; 
+                // Mainkan Detak Jantung
+                let bpm = 700; 
                 function playHeartbeat() {
                     if(!isChargingPhase || isExploded) return;
                     heartbeat.triggerAttackRelease("C1", "8n");
-                    bpm = Math.max(150, bpm - 40); 
+                    bpm = Math.max(150, bpm - 50); 
                     heartRateTimer = setTimeout(playHeartbeat, bpm);
                 }
                 playHeartbeat();
@@ -403,7 +434,7 @@
             warpSpeed = 0.5; portalGlow = 0;
 
             if (audioEnabled) {
-                rumbleNoise.volume.rampTo(-Infinity, 0.5);
+                wind.triggerRelease();
                 riser.triggerRelease();
             }
         }
@@ -418,8 +449,8 @@
             warpSpeed = 0; stars = []; shockwaveRadius = 1;
 
             if (audioEnabled) {
+                wind.triggerRelease();
                 riser.triggerRelease();
-                rumbleNoise.volume.value = -Infinity; 
             }
 
             setTimeout(() => {
@@ -448,7 +479,6 @@
                 fireworks.push({
                     x: x, y: y,
                     vx: (Math.random() - 0.5) * 35, vy: (Math.random() - 0.5) * 35 - 5, 
-                    // Warna kembang api dibikin lebih elegan (Gold/Cyan)
                     r: Math.random() * 3 + 1, a: 1, 
                     color: Math.random() > 0.5 ? `hsl(${Math.random()*20 + 40}, 100%, 75%)` : `hsl(${Math.random()*40 + 180}, 100%, 75%)`
                 });
@@ -462,7 +492,6 @@
                     x: x, y: y,
                     vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2,
                     r: Math.random() * 3 + 1, a: 1,
-                    // Warna stardust emas dan putih
                     color: `hsl(${Math.random()*40 + 30}, 100%, 85%)` 
                 });
             }
