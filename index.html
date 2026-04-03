@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Untuk Kamu ✨</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>
+        /* RESET & RESPONSIVE */
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #020205; color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            user-select: none; -webkit-user-select: none;
+            touch-action: none; 
+        }
+
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
+
+        .shake { animation: shake 0.4s infinite; }
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-2px, 2px) rotate(-1deg); }
+            50% { transform: translate(2px, -2px) rotate(1deg); }
+            75% { transform: translate(-2px, -2px) rotate(0deg); }
+        }
+
+        #ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 10; padding: 20px; box-sizing: border-box;
+        }
+
+        #story-text {
+            color: #e2e8f0; font-weight: 300; 
+            font-size: clamp(18px, 5vw, 24px); 
+            letter-spacing: 1px; text-align: center; margin-bottom: 50px; line-height: 1.6;
+            text-shadow: 0 0 15px rgba(255,255,255,0.3); 
+            transition: opacity 0.4s ease;
+            width: 100%; max-width: 500px; min-height: 80px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        #actionBtn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.4); color: #fff;
+            padding: clamp(12px, 3vw, 16px) clamp(25px, 6vw, 45px); 
+            font-size: clamp(14px, 4vw, 18px); 
+            border-radius: 40px; letter-spacing: 2px;
+            backdrop-filter: blur(10px); cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+            text-transform: uppercase; outline: none; font-weight: bold;
+            z-index: 100; position: relative;
+        }
+
+        #actionBtn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.2); }
+
+        #pesan-akhir {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 20; text-align: center; width: 90%; max-width: 600px;
+            opacity: 0; display: none; transition: opacity 3s ease-in;
+            padding: 20px; box-sizing: border-box;
+        }
+
+        #pesan-akhir h1 {
+            color: #ffffff; font-size: clamp(32px, 8vw, 48px); 
+            margin-bottom: 20px; margin-top: 0;
+            text-shadow: 0 0 20px #00f2fe, 0 0 40px #4facfe;
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        #pesan-akhir p { 
+            color: #f8fafc; font-size: clamp(16px, 4vw, 19px); 
+            line-height: 1.7; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .highlight { 
+            color: #ff9a9e; font-weight: bold; font-size: clamp(18px, 4.5vw, 22px); 
+            display: block; margin-top: 30px; text-shadow: 0 0 15px rgba(255, 154, 158, 0.6);
+        }
+
+        #flash {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #fff; z-index: 15; opacity: 0; pointer-events: none;
+            transition: opacity 0.15s; display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="flash"></div>
+    <canvas id="universe"></canvas>
+
+    <div id="ui-layer">
+        <div id="story-text">Jarak Solo ke Magetan emang lumayan...</div>
+        <button id="actionBtn">Lanjut ✨</button>
+    </div>
+
+    <div id="pesan-akhir">
+        <h1>Happy Birthday!</h1>
+        <p>Malam ini, biarkan cahaya ini yang menembus ruang untuk mewakili pelukanku buat kamu.</p>
+        <p>Terima kasih sudah lahir ke dunia ini, menjadi versi dirimu yang luar biasa kuat, dan memilih untuk terus bersamaku.</p>
+        <span class="highlight">I love you more than all the stars combined. ✨❤️</span>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('universe');
+        const ctx = canvas.getContext('2d');
+        const flash = document.getElementById('flash');
+        let width, height;
+        let stars = [];
+        let fireworks = [];
+        let shockwaveRadius = 0;
+        let numStars = 200; 
+        let fov = 250; 
+        let warpSpeed = 0.5;
+        let portalGlow = 0;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            numStars = width < 600 ? 150 : 350;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Star {
+            constructor() { this.reset(true); }
+            reset(randomZ = false) {
+                this.x = (Math.random() - 0.5) * width * 2;
+                this.y = (Math.random() - 0.5) * height * 2;
+                this.z = randomZ ? Math.random() * width : width;
+                this.pz = this.z;
+            }
+            update() {
+                this.pz = this.z;
+                this.z -= warpSpeed;
+                if (this.z < 1) this.reset();
+            }
+            draw() {
+                let sx = (this.x / this.z) * fov + width / 2;
+                let sy = (this.y / this.z) * fov + height / 2;
+                let px = (this.x / this.pz) * fov + width / 2;
+                let py = (this.y / this.pz) * fov + height / 2;
+
+                ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(sx, sy);
+                ctx.lineWidth = Math.max(0.5, (1 - this.z / width) * 4); 
+                let hue = warpSpeed > 5 ? 190 : 220; 
+                ctx.strokeStyle = `hsla(${hue}, 100%, 80%, ${1 - this.z / width})`;
+                ctx.stroke();
+            }
+        }
+        for(let i = 0; i < numStars; i++) stars.push(new Star());
+
+        // --- AUDIO ENGINE ---
+        let reverb, pad, riser, rumbleFilter, rumbleNoise, impact;
+        let audioInitialized = false;
+
+        async function initAudio() {
+            if (audioInitialized || typeof Tone === 'undefined') return;
+            try {
+                await Tone.start(); 
+                reverb = new Tone.Freeverb({ roomSize: 0.85, dampening: 3000 }).toDestination();
+                rumbleFilter = new Tone.Filter(100, "lowpass").connect(reverb);
+                rumbleNoise = new Tone.Noise("pink").connect(rumbleFilter).start();
+                rumbleNoise.volume.value = -Infinity; 
+
+                riser = new Tone.Synth({ oscillator: { type: "fatpwm" }, envelope: { attack: 0.1, decay: 0, sustain: 1, release: 0.5 } }).connect(reverb);
+                riser.volume.value = -Infinity;
+
+                pad = new Tone.PolySynth(Tone.Synth, { oscillator: { type: "fatsawtooth" }, envelope: { attack: 0.1, decay: 0.1, sustain: 0.8, release: 6 } }).connect(reverb);
+                pad.volume.value = -3;
+
+                impact = new Tone.MembraneSynth({ pitchDecay: 0.05, octaves: 10, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.4, sustain: 0.01, release: 1.4 } }).toDestination();
+
+                audioInitialized = true;
+            } catch (err) {
+                console.warn("Audio bypass fallback active.");
+                audioInitialized = true;
+            }
+        }
+
+        const storyLines = [
+            "Jarak Solo ke Magetan emang lumayan...",
+            "Pasti capek banget abis di jalan seharian.",
+            "Walaupun malam ini kita masih kepisah jarak...",
+            "Biar harapanku yang melesat nyamperin kamu.",
+            "Siap-siap ya..."
+        ];
+        
+        let currentStep = 0; let isChargingPhase = false; 
+        let chargeTimer; let isExploded = false; let isTransitioning = false;
+
+        const btn = document.getElementById('actionBtn');
+        const storyText = document.getElementById('story-text');
+        const pesanAkhir = document.getElementById('pesan-akhir');
+
+        async function handleNextStory(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (isTransitioning) return;
+            
+            isTransitioning = true;
+            btn.style.opacity = '0.5';
+
+            if (!audioInitialized) await initAudio();
+
+            if (currentStep < storyLines.length - 1) {
+                currentStep++;
+                storyText.style.opacity = 0; 
+                setTimeout(() => {
+                    storyText.innerText = storyLines[currentStep];
+                    storyText.style.opacity = 1; 
+                    btn.style.opacity = '1';
+                    isTransitioning = false;
+                }, 400); 
+            } else {
+                isChargingPhase = true;
+                storyText.style.opacity = 0;
+                setTimeout(() => {
+                    storyText.innerText = "Sentuh & tahan layar untuk menyatukan bintang. 🌌";
+                    storyText.style.opacity = 1;
+                    btn.innerText = "TAHAN & MAKE A WISH ✨";
+                    btn.style.opacity = '1';
+                    
+                    btn.removeEventListener('click', handleNextStory);
+                    btn.removeEventListener('touchstart', handleNextStory);
+                    
+                    btn.addEventListener('touchstart', startCharge, {passive: false});
+                    btn.addEventListener('touchend', stopCharge, {passive: false});
+                    btn.addEventListener('mousedown', startCharge);
+                    btn.addEventListener('mouseup', stopCharge);
+                    btn.addEventListener('mouseleave', stopCharge);
+                    
+                    isTransitioning = false;
+                }, 400);
+            }
+        }
+
+        btn.addEventListener('click', handleNextStory);
+        btn.addEventListener('touchstart', function(e) {
+            if(!isChargingPhase) handleNextStory(e);
+        }, {passive: false});
+
+        function startCharge(e) {
+            if (e && e.preventDefault) e.preventDefault(); 
+            if (isExploded || !isChargingPhase) return;
+            
+            btn.innerText = "MENYALURKAN HARAPAN... ⚡";
+            canvas.classList.add('shake'); 
+            warpSpeed = 45; 
+
+            if (audioInitialized && Tone.context.state === 'running') {
+                rumbleNoise.volume.rampTo(-10, 3.5);
+                rumbleFilter.frequency.rampTo(3000, 3.5);
+                riser.volume.value = -25;
+                riser.triggerAttack("C2");
+                riser.frequency.rampTo("C6", 3.5); 
+                riser.volume.rampTo(-5, 3.5);
+            }
+
+            chargeTimer = setTimeout(explode, 3500); 
+        }
+
+        function stopCharge(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (isExploded || !isChargingPhase) return;
+            
+            clearTimeout(chargeTimer);
+            btn.innerText = "TAHAN & MAKE A WISH ✨";
+            canvas.classList.remove('shake');
+            warpSpeed = 0.5; portalGlow = 0;
+
+            if (audioInitialized && Tone.context.state === 'running') {
+                rumbleNoise.volume.rampTo(-Infinity, 0.5);
+                riser.triggerRelease();
+            }
+        }
+
+        function explode() {
+            isExploded = true;
+            canvas.classList.remove('shake');
+            warpSpeed = 0; stars = []; shockwaveRadius = 1;
+
+            if (audioInitialized && Tone.context.state === 'running') {
+                riser.triggerRelease();
+                rumbleNoise.volume.value = -Infinity; 
+            }
+
+            setTimeout(() => {
+                if (audioInitialized && Tone.context.state === 'running') {
+                    impact.triggerAttackRelease("C0", "1m"); 
+                    pad.triggerAttackRelease(["F3", "A3", "C4", "E4", "G4"], "4m"); 
+                }
+
+                flash.style.display = 'block'; flash.style.opacity = '1';
+                setTimeout(() => { flash.style.opacity = '0'; }, 200);
+
+                let fireworkCount = width < 600 ? 200 : 450; 
+                for(let i=0; i < fireworkCount; i++) {
+                    fireworks.push({
+                        x: width/2, y: height/2,
+                        vx: (Math.random() - 0.5) * 35, vy: (Math.random() - 0.5) * 35 - 5, 
+                        r: Math.random() * 3.5 + 1, a: 1, 
+                        color: `hsl(${Math.random()*60 + 180}, 100%, 70%)` 
+                    });
+                }
+
+                document.getElementById('ui-layer').style.display = 'none';
+                pesanAkhir.style.display = 'block';
+                setTimeout(() => { pesanAkhir.style.opacity = '1'; }, 500);
+            }, 50);
+        }
+
+        function draw() {
+            ctx.fillStyle = isExploded ? `rgba(2, 2, 8, 0.4)` : `rgba(0, 0, 0, 0.4)`;
+            ctx.fillRect(0, 0, width, height);
+
+            if (!isExploded) {
+                stars.forEach(s => { s.update(); s.draw(); });
+                if (warpSpeed > 5) {
+                    portalGlow += 2;
+                    let grad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, portalGlow);
+                    grad.addColorStop(0, `rgba(0, 200, 255, ${Math.min(portalGlow/300, 0.4)})`);
+                    grad.addColorStop(1, 'transparent');
+                    ctx.fillStyle = grad;
+                    ctx.beginPath(); ctx.arc(width/2, height/2, portalGlow, 0, Math.PI*2); ctx.fill();
+                }
+            } else {
+                if (shockwaveRadius > 0 && shockwaveRadius < width * 1.5) {
+                    shockwaveRadius += (width < 600 ? 25 : 40); 
+                    ctx.beginPath(); ctx.arc(width/2, height/2, shockwaveRadius, 0, Math.PI*2);
+                    ctx.strokeStyle = `rgba(0, 242, 254, ${Math.max(0, 1 - shockwaveRadius/width)})`;
+                    ctx.lineWidth = width < 600 ? 8 : 15; ctx.stroke();
+                }
+
+                for(let i = fireworks.length - 1; i >= 0; i--) {
+                    let p = fireworks[i];
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.a -= 0.004; 
+                    
+                    ctx.globalAlpha = Math.max(0, p.a);
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+                    
+                    if(p.a <= 0) fireworks.splice(i, 1);
+                }
+                ctx.globalAlpha = 1;
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>
