@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Untuk Kamu ✨</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
         /* RESET & RESPONSIVE */
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: #020205; color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #050508; color: #fff;
+            font-family: 'Inter', sans-serif;
             overflow: hidden;
             user-select: none; -webkit-user-select: none;
             touch-action: none; 
@@ -33,10 +38,10 @@
         }
 
         #story-text {
-            color: #e2e8f0; font-weight: 300; 
-            font-size: clamp(18px, 5vw, 24px); 
-            letter-spacing: 1px; text-align: center; margin-bottom: 40px; line-height: 1.6;
-            text-shadow: 0 0 15px rgba(255,255,255,0.3); 
+            color: #f1f5f9; font-weight: 300; 
+            font-size: clamp(18px, 5vw, 22px); 
+            letter-spacing: 0.5px; text-align: center; margin-bottom: 40px; line-height: 1.6;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5); 
             transition: opacity 0.4s ease;
             width: 100%; max-width: 500px; min-height: 60px;
             display: flex; align-items: center; justify-content: center;
@@ -93,79 +98,81 @@
             100% { opacity: 0; transform: translateX(-50%) translateY(-100px) scale(4); }
         }
 
+        /* --- TOMBOL --- */
         #actionBtn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.4); color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            border-top: 1px solid rgba(255, 255, 255, 0.4); /* Efek pantulan cahaya di atas */
+            color: #fff;
             padding: clamp(12px, 3vw, 16px) clamp(25px, 6vw, 45px); 
-            font-size: clamp(14px, 4vw, 18px); 
+            font-size: clamp(14px, 4vw, 16px); 
             border-radius: 40px; letter-spacing: 2px;
-            backdrop-filter: blur(10px); cursor: pointer; transition: all 0.2s;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
-            text-transform: uppercase; outline: none; font-weight: bold;
+            backdrop-filter: blur(10px); cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase; outline: none; font-weight: 400;
             z-index: 100; position: relative;
         }
-        #actionBtn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.2); }
+        #actionBtn:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.1); }
 
-        /* --- DESAIN PESAN AKHIR YANG BARU (LEBIH MEWAH) --- */
+        /* --- DESAIN PESAN AKHIR (MODERN PREMIUM AESTHETIC) --- */
         #pesan-akhir {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -45%);
-            z-index: 20; text-align: center; width: 90%; max-width: 650px;
+            z-index: 20; text-align: center; width: 90%; max-width: 600px;
             opacity: 0; display: none; transition: all 3s ease-out;
         }
 
         .glass-card {
-            background: rgba(10, 15, 30, 0.5); /* Biru gelap transparan */
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 242, 254, 0.2);
-            border-radius: 25px;
-            padding: 40px 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(0, 242, 254, 0.05);
+            background: rgba(255, 255, 255, 0.03); /* Transparan banget, hampir gak keliatan warnanya */
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-top: 1px solid rgba(255, 255, 255, 0.3); /* Cahaya halus di ujung atas */
+            border-left: 1px solid rgba(255, 255, 255, 0.2); /* Cahaya halus di ujung kiri */
+            border-radius: 20px;
+            padding: 50px 35px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6); /* Bayangan dalam dan lembut */
             animation: float 6s ease-in-out infinite alternate;
-            pointer-events: none; /* Biar klik tembus ke canvas */
+            pointer-events: none; 
         }
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            100% { transform: translateY(-15px); }
+            100% { transform: translateY(-10px); }
         }
 
         #pesan-akhir h1 {
-            /* Efek Hologram Berjalan */
-            background: linear-gradient(90deg, #00f2fe, #4facfe, #fff, #4facfe, #00f2fe);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: gradientShine 4s linear infinite;
-            
-            font-size: clamp(32px, 8vw, 50px); 
+            font-family: 'Playfair Display', serif; /* Font elegan */
+            font-weight: 500;
+            color: #ffffff; 
+            font-size: clamp(30px, 8vw, 44px); 
             margin-bottom: 25px; margin-top: 0;
-            letter-spacing: 2px; text-transform: uppercase;
-        }
-
-        @keyframes gradientShine {
-            to { background-position: 200% center; }
+            letter-spacing: 1px;
+            text-shadow: 0 4px 15px rgba(255, 255, 255, 0.15); /* Cahaya putih halus, bukan neon */
         }
 
         #pesan-akhir p { 
-            color: #f1f5f9; font-size: clamp(15px, 4vw, 18px); 
-            line-height: 1.8; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            color: rgba(255, 255, 255, 0.85); /* Putih gading, gak terlalu silau */
+            font-size: clamp(15px, 4vw, 17px); 
+            line-height: 1.8; margin-bottom: 20px; 
             font-weight: 300;
         }
 
         .highlight { 
-            color: #ff9a9e; font-weight: bold; font-size: clamp(18px, 4.5vw, 22px); 
-            display: block; margin-top: 30px; text-shadow: 0 0 20px rgba(255, 154, 158, 0.5);
-            letter-spacing: 1px;
+            color: #fce7f3; /* Pink pastel super pucat / Rose gold */
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 500; 
+            font-size: clamp(18px, 4.5vw, 22px); 
+            display: block; margin-top: 35px; 
+            text-shadow: 0 2px 10px rgba(252, 231, 243, 0.3);
+            letter-spacing: 0.5px;
         }
 
         .hint {
-            font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 30px;
-            letter-spacing: 2px; text-transform: uppercase;
+            font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 40px;
+            letter-spacing: 3px; text-transform: uppercase;
             animation: pulseHint 2s infinite;
         }
-        @keyframes pulseHint { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        @keyframes pulseHint { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
 
         #flash {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -194,11 +201,11 @@
 
     <div id="pesan-akhir">
         <div class="glass-card">
-            <h1>Happy Birthday!</h1>
+            <h1>Happy Birthday</h1>
             <p>Malam ini, biarkan cahaya ini menembus jarak untuk mewakili pelukanku buat kamu.</p>
             <p>Terima kasih sudah lahir ke dunia ini, menjadi versi dirimu yang luar biasa tangguh, dan memilih untuk terus bersamaku.</p>
-            <span class="highlight">I love you more than all the stars combined. ✨❤️</span>
-            <div class="hint">Sentuh & Geser Layarnya</div>
+            <span class="highlight">I love you more than all the stars combined. ✨</span>
+            <div class="hint">Sentuh layarnya</div>
         </div>
     </div>
 
@@ -209,7 +216,7 @@
         let width, height;
         let stars = [];
         let fireworks = [];
-        let stardust = []; // Array baru untuk jejak jari
+        let stardust = []; 
         let shockwaveRadius = 0;
         let numStars = 200; 
         let fov = 250; 
@@ -245,15 +252,16 @@
 
                 ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(sx, sy);
                 ctx.lineWidth = Math.max(0.5, (1 - this.z / width) * 4); 
-                let hue = warpSpeed > 5 ? 190 : 220; 
-                ctx.strokeStyle = `hsla(${hue}, 100%, 80%, ${1 - this.z / width})`;
+                // Warna bintang disoft-kan
+                let hue = warpSpeed > 5 ? 200 : 220; 
+                ctx.strokeStyle = `hsla(${hue}, 80%, 80%, ${1 - this.z / width})`;
                 ctx.stroke();
             }
         }
         for(let i = 0; i < numStars; i++) stars.push(new Star());
 
         // --- AUDIO ENGINE ---
-        let reverb, pad, riser, rumbleFilter, rumbleNoise, impact;
+        let reverb, pad, riser, rumbleFilter, rumbleNoise, impact, heartbeat;
         let audioInitialized = false;
         let audioEnabled = false; 
 
@@ -262,6 +270,7 @@
             try {
                 await Tone.start(); 
                 reverb = new Tone.Freeverb({ roomSize: 0.85, dampening: 3000 }).toDestination();
+                
                 rumbleFilter = new Tone.Filter(100, "lowpass").connect(reverb);
                 rumbleNoise = new Tone.Noise("pink").connect(rumbleFilter).start();
                 rumbleNoise.volume.value = -Infinity; 
@@ -273,6 +282,9 @@
                 pad.volume.value = -3;
 
                 impact = new Tone.MembraneSynth({ pitchDecay: 0.05, octaves: 10, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.4, sustain: 0.01, release: 1.4 } }).toDestination();
+
+                heartbeat = new Tone.MembraneSynth({ pitchDecay: 0.05, octaves: 4, oscillator: { type: "sine" }, envelope: { attack: 0.01, decay: 0.4, sustain: 0.01, release: 1.4 } }).connect(reverb);
+                heartbeat.volume.value = -5; 
 
                 audioEnabled = true; 
                 audioInitialized = true;
@@ -291,6 +303,7 @@
         
         let currentStep = 0; let isChargingPhase = false; 
         let chargeTimer; let isExploded = false; let isTransitioning = false;
+        let heartRateTimer; 
 
         const btn = document.getElementById('actionBtn');
         const storyText = document.getElementById('story-text');
@@ -325,7 +338,7 @@
                     storyText.innerText = "Make a wish, sentuh & tahan layar untuk meniupnya. 🌬️✨";
                     storyText.style.opacity = 1;
                     
-                    btn.innerText = "TAHAN & TIUP LILINNYA 🌬️";
+                    btn.innerText = "TAHAN & TIUP LILINNYA";
                     btn.style.opacity = '1';
                     
                     btn.removeEventListener('click', handleNextStory);
@@ -351,7 +364,7 @@
             if (e && e.preventDefault) e.preventDefault(); 
             if (isExploded || !isChargingPhase) return;
             
-            btn.innerText = "MENYALURKAN HARAPAN... ⚡";
+            btn.innerText = "MENYALURKAN HARAPAN... ✨";
             canvas.classList.add('shake'); 
             candleWrapper.classList.add('blowing'); 
             warpSpeed = 45; 
@@ -363,6 +376,15 @@
                 riser.triggerAttack("C2");
                 riser.frequency.rampTo("C6", 3.5); 
                 riser.volume.rampTo(-5, 3.5);
+
+                let bpm = 800; 
+                function playHeartbeat() {
+                    if(!isChargingPhase || isExploded) return;
+                    heartbeat.triggerAttackRelease("C1", "8n");
+                    bpm = Math.max(150, bpm - 40); 
+                    heartRateTimer = setTimeout(playHeartbeat, bpm);
+                }
+                playHeartbeat();
             }
 
             chargeTimer = setTimeout(explode, 3500); 
@@ -373,7 +395,9 @@
             if (isExploded || !isChargingPhase) return;
             
             clearTimeout(chargeTimer);
-            btn.innerText = "TAHAN & TIUP LILINNYA 🌬️";
+            clearTimeout(heartRateTimer); 
+            
+            btn.innerText = "TAHAN & TIUP LILINNYA";
             canvas.classList.remove('shake');
             candleWrapper.classList.remove('blowing'); 
             warpSpeed = 0.5; portalGlow = 0;
@@ -386,6 +410,7 @@
 
         function explode() {
             isExploded = true;
+            clearTimeout(heartRateTimer); 
             canvas.classList.remove('shake');
             candleWrapper.classList.remove('blowing');
             candleWrapper.classList.add('extinguished'); 
@@ -406,39 +431,39 @@
                 flash.style.display = 'block'; flash.style.opacity = '1';
                 setTimeout(() => { flash.style.opacity = '0'; }, 200);
 
-                createFireworks(width/2, height/2, width < 600 ? 200 : 400); // Ledakan utama
+                createFireworks(width/2, height/2, width < 600 ? 200 : 400); 
 
                 document.getElementById('ui-layer').style.display = 'none';
                 
                 pesanAkhir.style.display = 'block';
                 setTimeout(() => { 
                     pesanAkhir.style.opacity = '1'; 
-                    pesanAkhir.style.transform = 'translate(-50%, -50%)'; // Gerakan naiknya mulus
+                    pesanAkhir.style.transform = 'translate(-50%, -50%)'; 
                 }, 100);
             }, 50); 
         }
 
-        // Fungsi buat kembang api (bisa dipanggil berulang)
         function createFireworks(x, y, count) {
             for(let i=0; i < count; i++) {
                 fireworks.push({
                     x: x, y: y,
                     vx: (Math.random() - 0.5) * 35, vy: (Math.random() - 0.5) * 35 - 5, 
-                    r: Math.random() * 3.5 + 1, a: 1, 
-                    color: `hsl(${Math.random()*60 + 180}, 100%, 70%)` 
+                    // Warna kembang api dibikin lebih elegan (Gold/Cyan)
+                    r: Math.random() * 3 + 1, a: 1, 
+                    color: Math.random() > 0.5 ? `hsl(${Math.random()*20 + 40}, 100%, 75%)` : `hsl(${Math.random()*40 + 180}, 100%, 75%)`
                 });
             }
         }
 
-        // --- THE STARDUST INTERACTION (Setelah Ledakan) ---
         function addStardust(x, y) {
             if(!isExploded) return;
             for(let i=0; i<3; i++) {
                 stardust.push({
                     x: x, y: y,
                     vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2,
-                    r: Math.random() * 4 + 1, a: 1,
-                    color: `hsl(${Math.random()*40 + 320}, 100%, 80%)` // Warna pinkish
+                    r: Math.random() * 3 + 1, a: 1,
+                    // Warna stardust emas dan putih
+                    color: `hsl(${Math.random()*40 + 30}, 100%, 85%)` 
                 });
             }
         }
@@ -449,14 +474,13 @@
         
         window.addEventListener('pointerdown', (e) => {
             if(isExploded) {
-                createFireworks(e.clientX, e.clientY, 30); // Ledakan kecil pas di-klik
-                if (audioEnabled) impact.triggerAttackRelease("C2", "8n", undefined, 0.1); // Suara pop kecil
+                createFireworks(e.clientX, e.clientY, 30); 
+                if (audioEnabled) impact.triggerAttackRelease("C2", "8n", undefined, 0.1); 
             }
         });
 
-        // --- RENDER LOOP ---
         function draw() {
-            ctx.fillStyle = isExploded ? `rgba(5, 5, 12, 0.3)` : `rgba(0, 0, 0, 0.4)`;
+            ctx.fillStyle = isExploded ? `rgba(5, 5, 10, 0.3)` : `rgba(0, 0, 0, 0.4)`;
             ctx.fillRect(0, 0, width, height);
 
             if (!isExploded) {
@@ -464,7 +488,7 @@
                 if (warpSpeed > 5) {
                     portalGlow += 2;
                     let grad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, portalGlow);
-                    grad.addColorStop(0, `rgba(0, 200, 255, ${Math.min(portalGlow/300, 0.4)})`);
+                    grad.addColorStop(0, `rgba(200, 230, 255, ${Math.min(portalGlow/300, 0.2)})`);
                     grad.addColorStop(1, 'transparent');
                     ctx.fillStyle = grad;
                     ctx.beginPath(); ctx.arc(width/2, height/2, portalGlow, 0, Math.PI*2); ctx.fill();
@@ -473,11 +497,10 @@
                 if (shockwaveRadius > 0 && shockwaveRadius < width * 1.5) {
                     shockwaveRadius += (width < 600 ? 25 : 40); 
                     ctx.beginPath(); ctx.arc(width/2, height/2, shockwaveRadius, 0, Math.PI*2);
-                    ctx.strokeStyle = `rgba(0, 242, 254, ${Math.max(0, 1 - shockwaveRadius/width)})`;
+                    ctx.strokeStyle = `rgba(200, 230, 255, ${Math.max(0, 1 - shockwaveRadius/width)})`;
                     ctx.lineWidth = width < 600 ? 8 : 15; ctx.stroke();
                 }
 
-                // Render Fireworks
                 for(let i = fireworks.length - 1; i >= 0; i--) {
                     let p = fireworks[i];
                     p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.a -= 0.008; 
@@ -488,10 +511,9 @@
                     if(p.a <= 0) fireworks.splice(i, 1);
                 }
 
-                // Render Stardust Trails
                 for(let i = stardust.length - 1; i >= 0; i--) {
                     let s = stardust[i];
-                    s.x += s.vx; s.y += s.vy; s.a -= 0.02; // Hilang lebih cepat
+                    s.x += s.vx; s.y += s.vy; s.a -= 0.02; 
                     
                     ctx.globalAlpha = Math.max(0, s.a);
                     ctx.fillStyle = s.color;
