@@ -35,12 +35,73 @@
         #story-text {
             color: #e2e8f0; font-weight: 300; 
             font-size: clamp(18px, 5vw, 24px); 
-            letter-spacing: 1px; text-align: center; margin-bottom: 50px; line-height: 1.6;
+            letter-spacing: 1px; text-align: center; margin-bottom: 40px; line-height: 1.6;
             text-shadow: 0 0 15px rgba(255,255,255,0.3); 
             transition: opacity 0.4s ease;
-            width: 100%; max-width: 500px; min-height: 80px;
+            width: 100%; max-width: 500px; min-height: 60px;
             display: flex; align-items: center; justify-content: center;
         }
+
+        /* --- CSS LILIN VIRTUAL --- */
+        .candle-container {
+            position: relative; margin-bottom: 60px; margin-top: 20px;
+            display: none; opacity: 0; transition: opacity 1s ease;
+        }
+
+        .candle {
+            width: 45px; height: 130px;
+            background: linear-gradient(to bottom, #fffdf2, #f5e3c3, #d4b886);
+            border-radius: 4px 4px 10px 10px; position: relative;
+            box-shadow: inset -5px 0 10px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .wick {
+            width: 4px; height: 15px; background: #222;
+            position: absolute; top: -15px; left: 50%;
+            transform: translateX(-50%); border-radius: 2px 2px 0 0;
+        }
+
+        .flame {
+            width: 26px; height: 45px;
+            background: radial-gradient(ellipse at bottom, #fff 10%, #ffd700 40%, #ff8c00 80%, transparent 100%);
+            border-radius: 50% 50% 20% 20%; position: absolute;
+            top: -55px; left: 50%; transform: translateX(-50%);
+            box-shadow: 0 0 50px 20px rgba(255, 165, 0, 0.5);
+            animation: flicker 1s infinite alternate;
+            transform-origin: bottom center; transition: all 0.3s ease;
+        }
+
+        .smoke {
+            width: 15px; height: 15px; background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%; position: absolute; top: -20px; left: 50%;
+            transform: translateX(-50%); opacity: 0; filter: blur(6px);
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+            50% { transform: translateX(-50%) scale(1.05) rotate(3deg); }
+            100% { transform: translateX(-50%) scale(0.95) rotate(-1deg); }
+        }
+
+        /* Lilin ditiup (tombol ditahan) */
+        .blowing .flame {
+            transform: translateX(-50%) scale(0.6) rotate(50deg);
+            box-shadow: 0 0 20px 5px rgba(255, 165, 0, 0.3);
+            animation: flickerFast 0.1s infinite alternate;
+        }
+        @keyframes flickerFast {
+            0% { transform: translateX(-50%) scale(0.6) rotate(45deg); }
+            100% { transform: translateX(-50%) scale(0.5) rotate(55deg); }
+        }
+
+        /* Lilin Mati */
+        .extinguished .flame { opacity: 0; width: 0; height: 0; }
+        .extinguished .smoke { animation: riseSmoke 2s ease-out forwards; }
+        @keyframes riseSmoke {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-100px) scale(4); }
+        }
+        /* -------------------------- */
 
         #actionBtn {
             background: rgba(255, 255, 255, 0.08);
@@ -94,13 +155,21 @@
 
     <div id="ui-layer">
         <div id="story-text">Jarak Solo ke Magetan emang lumayan...</div>
+        
+        <div class="candle-container" id="candleWrapper">
+            <div class="flame"></div>
+            <div class="smoke"></div>
+            <div class="wick"></div>
+            <div class="candle"></div>
+        </div>
+
         <button id="actionBtn">Lanjut ✨</button>
     </div>
 
     <div id="pesan-akhir">
         <h1>Happy Birthday!</h1>
-        <p>Malam ini, biarkan cahaya ini yang menembus ruang untuk mewakili pelukanku buat kamu.</p>
-        <p>Terima kasih sudah lahir ke dunia ini, menjadi versi dirimu yang luar biasa kuat, dan memilih untuk terus bersamaku.</p>
+        <p>Malam ini, biarkan cahaya ini menembus jarak untuk mewakili pelukanku buat kamu.</p>
+        <p>Terima kasih sudah lahir ke dunia ini, menjadi versi dirimu yang luar biasa tangguh, dan memilih untuk terus bersamaku.</p>
         <span class="highlight">I love you more than all the stars combined. ✨❤️</span>
     </div>
 
@@ -156,6 +225,7 @@
         // --- AUDIO ENGINE ---
         let reverb, pad, riser, rumbleFilter, rumbleNoise, impact;
         let audioInitialized = false;
+        let audioEnabled = false; 
 
         async function initAudio() {
             if (audioInitialized || typeof Tone === 'undefined') return;
@@ -174,6 +244,7 @@
 
                 impact = new Tone.MembraneSynth({ pitchDecay: 0.05, octaves: 10, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.4, sustain: 0.01, release: 1.4 } }).toDestination();
 
+                audioEnabled = true; 
                 audioInitialized = true;
             } catch (err) {
                 console.warn("Audio bypass fallback active.");
@@ -185,8 +256,7 @@
             "Jarak Solo ke Magetan emang lumayan...",
             "Pasti capek banget abis di jalan seharian.",
             "Walaupun malam ini kita masih kepisah jarak...",
-            "Biar harapanku yang melesat nyamperin kamu.",
-            "Siap-siap ya..."
+            "Biar harapanku yang melesat nyamperin kamu."
         ];
         
         let currentStep = 0; let isChargingPhase = false; 
@@ -195,6 +265,7 @@
         const btn = document.getElementById('actionBtn');
         const storyText = document.getElementById('story-text');
         const pesanAkhir = document.getElementById('pesan-akhir');
+        const candleWrapper = document.getElementById('candleWrapper');
 
         async function handleNextStory(e) {
             if (e && e.preventDefault) e.preventDefault();
@@ -215,12 +286,18 @@
                     isTransitioning = false;
                 }, 400); 
             } else {
+                // FASE MUNCUL LILIN & TOMBOL TAHAN
                 isChargingPhase = true;
                 storyText.style.opacity = 0;
                 setTimeout(() => {
-                    storyText.innerText = "Sentuh & tahan layar untuk menyatukan bintang. 🌌";
+                    // Munculin lilinnya
+                    candleWrapper.style.display = 'block';
+                    setTimeout(() => { candleWrapper.style.opacity = '1'; }, 50);
+
+                    storyText.innerText = "Make a wish, sentuh & tahan layar untuk meniupnya. 🌬️✨";
                     storyText.style.opacity = 1;
-                    btn.innerText = "TAHAN & MAKE A WISH ✨";
+                    
+                    btn.innerText = "TAHAN & TIUP LILINNYA 🌬️";
                     btn.style.opacity = '1';
                     
                     btn.removeEventListener('click', handleNextStory);
@@ -248,9 +325,10 @@
             
             btn.innerText = "MENYALURKAN HARAPAN... ⚡";
             canvas.classList.add('shake'); 
+            candleWrapper.classList.add('blowing'); // Lilin ketiup
             warpSpeed = 45; 
 
-            if (audioInitialized && Tone.context.state === 'running') {
+            if (audioEnabled) {
                 rumbleNoise.volume.rampTo(-10, 3.5);
                 rumbleFilter.frequency.rampTo(3000, 3.5);
                 riser.volume.value = -25;
@@ -267,11 +345,12 @@
             if (isExploded || !isChargingPhase) return;
             
             clearTimeout(chargeTimer);
-            btn.innerText = "TAHAN & MAKE A WISH ✨";
+            btn.innerText = "TAHAN & TIUP LILINNYA 🌬️";
             canvas.classList.remove('shake');
+            candleWrapper.classList.remove('blowing'); // Lilin normal lagi
             warpSpeed = 0.5; portalGlow = 0;
 
-            if (audioInitialized && Tone.context.state === 'running') {
+            if (audioEnabled) {
                 rumbleNoise.volume.rampTo(-Infinity, 0.5);
                 riser.triggerRelease();
             }
@@ -280,22 +359,27 @@
         function explode() {
             isExploded = true;
             canvas.classList.remove('shake');
+            candleWrapper.classList.remove('blowing');
+            candleWrapper.classList.add('extinguished'); // Lilin mati berasap
+            
             warpSpeed = 0; stars = []; shockwaveRadius = 1;
 
-            if (audioInitialized && Tone.context.state === 'running') {
+            if (audioEnabled) {
                 riser.triggerRelease();
                 rumbleNoise.volume.value = -Infinity; 
             }
 
             setTimeout(() => {
-                if (audioInitialized && Tone.context.state === 'running') {
+                if (audioEnabled) {
                     impact.triggerAttackRelease("C0", "1m"); 
                     pad.triggerAttackRelease(["F3", "A3", "C4", "E4", "G4"], "4m"); 
                 }
 
+                // Kilatan cahaya
                 flash.style.display = 'block'; flash.style.opacity = '1';
                 setTimeout(() => { flash.style.opacity = '0'; }, 200);
 
+                // Ledakan partikel
                 let fireworkCount = width < 600 ? 200 : 450; 
                 for(let i=0; i < fireworkCount; i++) {
                     fireworks.push({
@@ -306,10 +390,13 @@
                     });
                 }
 
+                // Sembunyikan semua UI awal (termasuk lilin)
                 document.getElementById('ui-layer').style.display = 'none';
+                
+                // Munculkan pesan pamungkas
                 pesanAkhir.style.display = 'block';
                 setTimeout(() => { pesanAkhir.style.opacity = '1'; }, 500);
-            }, 50);
+            }, 50); // Jeda sangat singkat biar kerasa impact-nya
         }
 
         function draw() {
